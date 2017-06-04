@@ -3,6 +3,7 @@
 module.exports = function(Recommendation) {
   Recommendation.count = function(msg, cb) {
     cb(null, 'The total for recommednations are' + msg);
+    msg++;
   };
 
   Recommendation.remoteMethod('count', {
