@@ -41,16 +41,16 @@ app.use(function(req, res, next) {
         if (err) return next(err);
         if (!accessToken)
           return next(new Error('could not find the given token'));
-      // Look up the user associated with the access token
+        // Look up the user associated with the access token
         UserModel.findById(accessToken.userId, function(err, user) {
           if (err)
-           return next(err);
+            return next(err);
           if (!user)
-            returnnext(new Error('could not find a valid user' +
-             'with the given token'));
-        app.currentUser = user;
+            return next(new Error('could not find a valid user' +
+              'with the given token'));
+          app.currentUser = user;
           next();
-      });
+        });
       });
   });
 });
