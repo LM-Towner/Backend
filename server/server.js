@@ -26,3 +26,31 @@ boot(app, __dirname, function(err) {
   if (require.main === module)
     app.start();
 });
+
+app.use(function(req, res, next) {
+  app.currentUser = null;
+
+  // Retrieve the access token used in this request
+  var AccessTokenModel = app.models.AccessToken;
+  AccessTokenModel.findForRequest(req, {}, function(err, token) {
+    if (err) return next(err);
+    if (!token) return next();
+    var UserModel = app.models.User;
+    UserModel.relations.accessTokens.modelTo.findById(token.id,
+      function(err, accessToken) {
+        if (err) return next(err);
+        if (!accessToken)
+          return next(new Error('could not find the given token'));
+      // Look up the user associated with the access token
+        UserModel.findById(accessToken.userId, function(err, user) {
+          if (err)
+           return next(err);
+          if (!user)
+            returnnext(new Error('could not find a valid user' +
+             'with the given token'));
+        app.currentUser = user;
+          next();
+      });
+      });
+  });
+});

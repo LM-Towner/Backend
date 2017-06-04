@@ -77,7 +77,7 @@ module.exports = function(User) {
     password: req.body.password
   }, 'user', function(err, token) {
     if (err) {
-      res.render('response', { //render view named 'response.ejs'
+      res.render('response', {
         title: 'Login failed',
         content: err,
         redirectTo: '/',
@@ -86,10 +86,10 @@ module.exports = function(User) {
       return;
     }
 
-    res.render('home', { //login user and render 'home' view
+    res.render('home', {
       email: req.body.email,
       accessToken: token.id
     });
   });
-}); 
+  });
 };
